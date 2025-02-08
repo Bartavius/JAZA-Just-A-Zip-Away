@@ -1,0 +1,67 @@
+* {
+    font-family: "sans-serif", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
+    font-weight: 1000;
+}
+
+a {
+    color: rgb(131, 226, 131);
+    text-decoration: none;
+}
+
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: white;
+    background-color: rgb(98, 194, 231);
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
+.wave-opacity-divider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  margin-top: -5px; /* Adjust to perfectly align under navbar */
+}
+
+.wave-opacity-divider svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 105px;
+}
+
+.wave-opacity-divider .shape-fill {
+  fill: #ffffff !important;
+}
+
+.navbar {
+  background-color: white !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #6c757d; /* Grey color */
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #5a6268; /* Darker grey on hover */
+}
+
+.navbar h3 {
+  color: #6c757d;
+}
+
+.svg-image {
+    width: 100%;
+    object-fit: fill;
+}
+
+.footer {
+    background-color: #a93c28;;
+}
