@@ -4,13 +4,13 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class UserAccount(models.Model):
-    id = models.OneToOneField('app.CustomUser', primary_key=True, on_delete=models.CASCADE)
+    id = models.OneToOneField('accounts.CustomUser', primary_key=True, on_delete=models.CASCADE)
     username = models.CharField(max_length=100, unique=True)
     def __str__(self):
         return self.username; 
 
 class CompanyAccount(models.Model):
-    id = models.OneToOneField('app.CustomUser', primary_key=True, on_delete=models.CASCADE)
+    id = models.OneToOneField('accounts.CustomUser', primary_key=True, on_delete=models.CASCADE)
     companyName = models.CharField(max_length=100, unique=True)
     def __str__(self):
         return self.companyName; 

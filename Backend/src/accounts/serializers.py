@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import CompanyAccount, UserAccount
+from .models import CompanyAccount, UserAccount, CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email', 'password', 'type']
         extra_kwargs = {'password': {'write_only': True}}
     
@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         
         if aType not in ['Company', 'User']:
             raise serializers.ValidationError("Invalid account type. Must be either 'Company' or 'User'.")
-        user = User.objects.create_user(**validated_data)
+        user = CustomUser.objects.create_user(**validated_data)
 
 
         if aType == 'Company':

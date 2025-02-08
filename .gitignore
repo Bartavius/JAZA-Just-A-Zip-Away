@@ -1,2 +1,4 @@
-/Lib
-/Includes
+/Backend/Lib
+/Backend/Include
+/Backend/pyvenv.cfg
+**/__pycache__
