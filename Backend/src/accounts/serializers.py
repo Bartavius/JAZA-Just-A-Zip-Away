@@ -1,27 +1,47 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import CompanyAccount, UserAccount, CustomUser
+from .models import CompanyAccount, UserAccount
 
-class UserSerializer(serializers.ModelSerializer):
+class CompanyAccountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
-        fields = ['username', 'email', 'password', 'type']
-        extra_kwargs = {'password': {'write_only': True}}
-    
+        model = User
+        fields = ['username', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'username': {'required': True},
+        }
+
     def create(self, validated_data):
-        aType = validated_data.pop('type')
-        username = validated_data['username']
-        
-        if aType not in ['Company', 'User']:
-            raise serializers.ValidationError("Invalid account type. Must be either 'Company' or 'User'.")
-        user = CustomUser.objects.create_user(**validated_data)
+        user_data = {
+            'username': validated_data['username'],
+            'password': validated_data['password']
+        }
+        user = User.objects.create_user(**user_data)
 
 
-        if aType == 'Company':
-            CompanyAccount.objects.create(user=user, companyName=username)
-            CompanyAccount.save()
-        elif aType == 'User':
-            UserAccount.objects.create(user=user, username=username)
-            UserAccount.save()
+        company_account = CompanyAccount(id=user,username=validated_data['username'])
+        company_account.save()
+        return user
 
+class UserAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = ['username', 'password','first_name','last_name']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'username': {'required': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+        }
+
+    def create(self, validated_data):
+        user_data = {
+            'username': validated_data['username'],
+            'password': validated_data['password'],
+            'first_name': validated_data['first_name'],
+            'last_name': validated_data['last_name'],
+        }
+        user = User.objects.create_user(**user_data)
+        user_account = UserAccount(id=user,username=validated_data["username"])
+        user_account.save()
         return user
