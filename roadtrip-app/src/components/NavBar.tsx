@@ -1,10 +1,14 @@
 import "../styles.css";
+import { FaCar } from "react-icons/fa";
 
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light position-relative z-3 bg-white">
+      <a href="/" className="logo-container">
+        <FaCar className="ms-4 text-secondary fs-4 idle-resize" />{" "}
+        <span className="text-secondary ms-3 logo-text">Road Trip</span>{" "}
+      </a>
       <div className="container bg-white">
-        <h3>Logo here</h3>
         <button
           className="navbar-toggler"
           type="button"
@@ -31,6 +35,11 @@ const Navbar = () => {
             <li className="nav-item">
               <a className="nav-link" href="/contact">
                 Contact
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/login">
+                Login
               </a>
             </li>
           </ul>

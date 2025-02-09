@@ -21,7 +21,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex flex-column align-items-center mt-5">
+    <div className="container align-items-center mt-5 text-secondary">
       <h2>Login</h2>
       <form onSubmit={handleLogin} className="w-50">
         <div className="mb-3">
@@ -43,7 +43,8 @@ const Login = () => {
           />
         </div>
         {error && <p className="text-danger">{error}</p>}
-        <button type="submit" className="btn btn-primary w-100">
+        <a href="/register" className="text-secondary"><u>Register</u></a>
+        <button type="submit" className="mt-2 btn btn-primary w-100">
           Login
         </button>
       </form>

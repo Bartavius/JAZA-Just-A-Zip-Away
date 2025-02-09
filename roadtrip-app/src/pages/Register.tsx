@@ -35,7 +35,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container d-flex flex-column align-items-center mt-5">
+    <div className="container align-items-center mt-5 text-secondary">
       <h2>Register</h2>
       <form onSubmit={handleRegister} className="w-50">
         <div className="mb-3">
@@ -67,7 +67,8 @@ const Register = () => {
         </div>
         {error && <p className="text-danger">{error}</p>}
         {successMessage && <p className="text-success">{successMessage}</p>}
-        <button type="submit" className="btn btn-primary w-100">
+        <a href="/login" className="text-secondary"><u>Login</u></a>
+        <button type="submit" className="btn btn-primary w-100 mt-2">
           Register
         </button>
       </form>

@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/Backend/Lib
+/Backend/Include
+/Backend/pyvenv.cfg
+**/__pycache__
