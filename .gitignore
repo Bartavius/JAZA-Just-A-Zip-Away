@@ -2,3 +2,4 @@
 /Backend/Include
 /Backend/pyvenv.cfg
 **/__pycache__
+.vscode
