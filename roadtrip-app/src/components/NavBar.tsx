@@ -1,3 +1,4 @@
+
 import "../styles.css";
 import { FaCar } from "react-icons/fa";
 
@@ -6,7 +7,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light position-relative z-3 bg-white">
       <a href="/" className="logo-container">
         <FaCar className="ms-4 text-secondary fs-4 idle-resize" />{" "}
-        <span className="text-secondary ms-3 logo-text">Road Trip</span>{" "}
+        <span className="text-secondary ms-3 logo-text">Just A Zip Away </span>{" "}
       </a>
       <div className="container bg-white">
         <button
@@ -27,11 +28,18 @@ const Navbar = () => {
                 Home
               </a>
             </li>
-            <li className="nav-item">
+            
+              <li className="nav-item">
               <a className="nav-link" href="/dashboard">
                 Dashboard
               </a>
-            </li>
+            </li> 
+            <li className="nav-item">
+            <a className="nav-link" href="/plan-a-trip">
+              Plan Trip
+            </a>
+          </li>
+            
             <li className="nav-item">
               <a className="nav-link" href="/contact">
                 Contact

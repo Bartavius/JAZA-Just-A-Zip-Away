@@ -5,7 +5,7 @@ export default function Contact() {
         <div className="container">
             <h1 className="section-header">Contact Page</h1>
             
-            <div className="w-25 container">
+            <div className="">
             <AutoScrollingCarousel />
             </div>
             

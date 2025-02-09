@@ -1,5 +1,5 @@
 import GoogleMap from "../components/GoogleMaps";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaArrowRightToCity } from "react-icons/fa6";
 import api from "../api";
@@ -37,22 +37,24 @@ export default function PlanATrip() {
 
     const geocoder = new google.maps.Geocoder();
 
-    return new Promise<{ address: string; latitude: number; longitude: number }>(
-      (resolve, reject) => {
-        geocoder.geocode({ address }, (results, status) => {
-          if (status === "OK" && results && results[0]) {
-            const location = results[0].geometry.location;
-            resolve({
-              address: address,
-              latitude: location.lat(),
-              longitude: location.lng(),
-            });
-          } else {
-            reject("Geocode failed: " + status);
-          }
-        });
-      }
-    );
+    return new Promise<{
+      address: string;
+      latitude: number;
+      longitude: number;
+    }>((resolve, reject) => {
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === "OK" && results && results[0]) {
+          const location = results[0].geometry.location;
+          resolve({
+            address: address,
+            latitude: location.lat(),
+            longitude: location.lng(),
+          });
+        } else {
+          reject("Geocode failed: " + status);
+        }
+      });
+    });
   };
 
   const setCoordinates = async () => {
@@ -106,23 +108,31 @@ export default function PlanATrip() {
     latitude: 0,
     longitude: 0,
   });
+  const [posts, setPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await api.get("/api/post/get/");
+      setPosts(res.data);
+    };
+    fetchPosts();
+  }, []);
 
   const sendReturnObject = async () => {
-    try {
-      const response = await api.post("/api/post/create/", returnObject);
-    } catch (error) {
-      console.error(error);
-    }
+    const returnObj = {
+      title: title,
+      content: description,
+      start_location: origin,
+      end_location: destination,
+      start_time: startDate,
+      end_time: endDate,
+    };
+    console.log(JSON.stringify(returnObj));
+    const res = await api
+      .post("/api/post/create/", returnObj)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
   };
-
-  const [returnObject, setReturnObject] = useState({
-    title: title,
-    content: description,
-    start_location: origin,
-    end_location: destination,
-    start_time: startDate,
-    end_time: endDate,
-  });
 
   return (
     <div className="container">
@@ -140,7 +150,11 @@ export default function PlanATrip() {
               className="form-control rounded-3"
               placeholder="'Boston, MA'"
               onChange={(e) => {
-                setOrigin({ address: e.target.value, latitude: 0, longitude: 0 });
+                setOrigin({
+                  address: e.target.value,
+                  latitude: 0,
+                  longitude: 0,
+                });
               }}
               required
             />
@@ -156,7 +170,11 @@ export default function PlanATrip() {
               className="form-control rounded-3"
               placeholder="'Las Vegas, NV'"
               onChange={(e) => {
-                setDestination({ address: e.target.value, latitude: 0, longitude: 0 });
+                setDestination({
+                  address: e.target.value,
+                  latitude: 0,
+                  longitude: 0,
+                });
               }}
               required
             />
@@ -192,6 +210,7 @@ export default function PlanATrip() {
                 id="title"
                 className="form-control w-50 mb-2"
                 placeholder="'A drive through Vegas...'"
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             <label htmlFor="description" className="mb-2">
@@ -204,6 +223,7 @@ export default function PlanATrip() {
               className="form-control"
               rows={5}
               placeholder="'They say go big or go home ... Well, we are having one scenic route before going all in on my life savings...'"
+              onChange={(e) => setDescription(e.target.value)}
               required
             ></textarea>
           </div>
@@ -249,13 +269,53 @@ export default function PlanATrip() {
             <h1 className="text-white">** Please enter a location **</h1>
           )}
         </div>
-        <div className="result-box-container mt-4 text-black">
-          <h3>
-            Other people looking to take you on a road trip! don't forget
-            loading...
-          </h3>
-        </div>
       </form>
+      <hr />
+      <h2>Check out other people who are planning out there trips! </h2>
+      {posts.length > 0 &&
+        posts.map((post: any) => (
+          <div className="result-box-container mt-4 rounded-4 text-black">
+            <div className="result-box" key={post.id}>
+              <h3>
+                <b className="bg-white d-inline-block p-2 ps-3 pe-3 rounded-4">
+                  {post.title}
+                </b>{" "}
+                <span className="ms-3">{post.userInfo.username}</span>
+              </h3>
+              <h6 className="mt-3 mb-3 ms-3">{post.message}</h6>
+
+              <div className="mt-3 container bg-white rounded-3">
+                <h5 className=" ms-3 p-1">
+                  <b>FROM:</b> {post.start_location_address}
+                </h5>
+                <h5 className=" ms-3 p-1">
+                  <b>TO:</b> {post.end_location_address}
+                </h5>
+                <h5 className="ms-3 p-1">
+                    <b>TIME: </b>
+                  {new Date(post.start_time).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  <br />
+                  <h5 className="ms-5 p-2">
+                  {new Date(post.end_time).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</h5>
+                </h5>
+              </div>
+            </div>
+          </div>
+        ))}
     </div>
   );
 }
