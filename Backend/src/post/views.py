@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from accounts.models import CompanyAccount,UserAccount
 from .models import CompanyPost, Location, Linker
-from .serializers import CompanyPostSerializer
+from .serializers import CompanyPostSerializer, UserAccount2Serializer
 from datetime import datetime
 
 def create_loc(info):
@@ -126,4 +126,43 @@ class PostApplications(APIView):
             return Response({"error":"invalid response"},status=status.HTTP_400_BAD_REQUEST)
         
         return Response({"message": "Successful Application Made"}, status=status.HTTP_200_OK)
-    
+
+class ViewPosts(APIView):
+    def get(self,request):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'error': 'Please login'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user_account = UserAccount.objects.get(id=user.id)
+        except UserAccount.DoesNotExist:
+            return Response({'error': 'UserAccount not found'}, status=status.HTTP_404_NOT_FOUND)
+        linkers = Linker.objects.filter(userid=user_account)
+        applied_posts = [linker.post for linker in linkers]
+
+        serializer = CompanyPostSerializer(applied_posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class GetAppliedPosts(APIView):
+    def get(self,request,pk):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'error': 'Please login'}, status=status.HTTP_400_BAD_REQUEST)
+        if not user.has_perm("accounts.create_post"):
+            return Response({'error': 'Please login'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            company_account = CompanyAccount.objects.get(id=request.user.id)
+        except CompanyAccount.DoesNotExist:
+                return Response({'error': 'CompanyAccount not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            post = CompanyPost.objects.get(id=pk, user=company_account)
+        except Exception:
+                return Response({'error': 'Post Unavailible'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        linkers = Linker.objects.filter(post=post)
+        applied = [linker.userid for linker in linkers]
+
+        applied_serialize = UserAccount2Serializer(applied, many=True)
+
+        return Response(applied_serialize.data, status=status.HTTP_200_OK)
