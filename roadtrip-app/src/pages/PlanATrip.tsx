@@ -5,9 +5,9 @@ import { FaArrowRightToCity } from "react-icons/fa6";
 import api from "../api";
 
 interface LocationInput {
-  name: string;
-  lat: number;
-  lng: number;
+  address: string;
+  latitude: number;
+  longitude: number;
 }
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "";
@@ -32,20 +32,20 @@ export default function PlanATrip() {
   };
 
   const getCoordinates = async (address: string) => {
-    if (!address) return { name: address, lat: 0, lng: 0 };
+    if (!address) return { address: address, latitude: 0, longitude: 0 };
     await loadGoogleMaps();
 
     const geocoder = new google.maps.Geocoder();
 
-    return new Promise<{ name: string; lat: number; lng: number }>(
+    return new Promise<{ address: string; latitude: number; longitude: number }>(
       (resolve, reject) => {
         geocoder.geocode({ address }, (results, status) => {
           if (status === "OK" && results && results[0]) {
             const location = results[0].geometry.location;
             resolve({
-              name: address,
-              lat: location.lat(),
-              lng: location.lng(),
+              address: address,
+              latitude: location.lat(),
+              longitude: location.lng(),
             });
           } else {
             reject("Geocode failed: " + status);
@@ -60,8 +60,8 @@ export default function PlanATrip() {
 
     // only AFTER submitting the form, we will get the coordinates
     setLoading(true);
-    const newOrigin = await getCoordinates(origin.name);
-    const newDestination = await getCoordinates(destination.name);
+    const newOrigin = await getCoordinates(origin.address);
+    const newDestination = await getCoordinates(destination.address);
     setOrigin(newOrigin);
     setDestination(newDestination);
     setLoading(false);
@@ -97,19 +97,19 @@ export default function PlanATrip() {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [origin, setOrigin] = useState<LocationInput>({
-    name: "",
-    lat: 0,
-    lng: 0,
+    address: "",
+    latitude: 0,
+    longitude: 0,
   });
   const [destination, setDestination] = useState<LocationInput>({
-    name: "",
-    lat: 0,
-    lng: 0,
+    address: "",
+    latitude: 0,
+    longitude: 0,
   });
 
   const sendReturnObject = async () => {
     try {
-      const response = await api.post("/api/post/create", returnObject);
+      const response = await api.post("/api/post/create/", returnObject);
     } catch (error) {
       console.error(error);
     }
@@ -117,12 +117,11 @@ export default function PlanATrip() {
 
   const [returnObject, setReturnObject] = useState({
     title: title,
-    description: description,
-    startLocation: origin,
-    endLocation: destination,
-    postTime: currentDate,
-    startTime: startDate,
-    endTime: endDate,
+    content: description,
+    start_location: origin,
+    end_location: destination,
+    start_time: startDate,
+    end_time: endDate,
   });
 
   return (
@@ -141,7 +140,7 @@ export default function PlanATrip() {
               className="form-control rounded-3"
               placeholder="'Boston, MA'"
               onChange={(e) => {
-                setOrigin({ name: e.target.value, lat: 0, lng: 0 });
+                setOrigin({ address: e.target.value, latitude: 0, longitude: 0 });
               }}
               required
             />
@@ -157,7 +156,7 @@ export default function PlanATrip() {
               className="form-control rounded-3"
               placeholder="'Las Vegas, NV'"
               onChange={(e) => {
-                setDestination({ name: e.target.value, lat: 0, lng: 0 });
+                setDestination({ address: e.target.value, latitude: 0, longitude: 0 });
               }}
               required
             />
@@ -213,9 +212,6 @@ export default function PlanATrip() {
             className="btn btn-primary mt-4 ms-2 plan-button d-flex align-items-center"
             onClick={() => {
               setCoordinates();
-              const currentDate = new Date();
-              const formatted = formatDate(currentDate);
-              setCurrentDate(formatted);
               sendReturnObject();
             }}
           >
@@ -225,21 +221,21 @@ export default function PlanATrip() {
         </div>
         <hr />
         <div className="container mb-5">
-          {origin.lat !== 0 &&
-            destination.lat !== 0 &&
-            origin.lng !== 0 &&
-            destination.lng !== 0 && (
+          {origin.latitude !== 0 &&
+            destination.latitude !== 0 &&
+            origin.longitude !== 0 &&
+            destination.longitude !== 0 && (
               <p>
                 Calculating route from{" "}
-                <span className="text-primary">{origin.name}</span> to{" "}
-                <span className="text-primary">{destination.name}</span>.
+                <span className="text-primary">{origin.address}</span> to{" "}
+                <span className="text-primary">{destination.address}</span>.
               </p>
             )}
 
-          {origin.lat !== 0 &&
-          destination.lat !== 0 &&
-          origin.lng !== 0 &&
-          destination.lng !== 0 ? (
+          {origin.latitude !== 0 &&
+          destination.latitude !== 0 &&
+          origin.longitude !== 0 &&
+          destination.longitude !== 0 ? (
             <div>
               {loading ? (
                 <h1>Loading...</h1>

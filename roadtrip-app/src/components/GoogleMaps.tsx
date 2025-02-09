@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "";
 
-interface Location { lat: number;  lng: number;}
+interface Location {address:String, latitude: number,  longitude: number;}
 
 export default function GoogleMap({location1, location2} : {location1: Location, location2: Location}) {
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function GoogleMap({location1, location2} : {location1: Location,
         return;
       }
       const map = new google.maps.Map(mapElement, {
-        center: { lat: location1.lat - location2.lat, lng: location1.lng - location2.lng }, // Tokyo Example
+        center: { lat: location1.latitude - location2.latitude, lng: location1.longitude - location2.longitude }, // Tokyo Example
         zoom: 10,
       });
 
@@ -23,8 +23,8 @@ export default function GoogleMap({location1, location2} : {location1: Location,
 
       directionsService.route(
         {
-          origin: location1,
-          destination: location2,
+          origin: {lat: location1.latitude, lng: location1.longitude},
+          destination: {lat: location2.latitude, lng: location2.longitude},
           travelMode: google.maps.TravelMode.DRIVING,
           provideRouteAlternatives: true,
           drivingOptions: {
