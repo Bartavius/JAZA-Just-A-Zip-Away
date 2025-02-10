@@ -1,24 +1,26 @@
 import { useState } from "react";
-import api from "../api"; // Import Axios instance
+import { loginUser}  from "../services/auth";
+import { useDispatch } from "react-redux";
+import { clearTokens  } from "../services/authSlice";
+import store from "../services/store";
+import api from "../api";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
-
-    try {
-      const response = await api.post("/api/accounts/login/", { username, password });
-
-      localStorage.setItem("token", response.data.access); // Store JWT token
-      alert("Login successful!");
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Invalid email or password");
-    }
+    const data = await loginUser(username, password, dispatch);
+    console.log("Tokens stored in Redux after login:", store.getState().auth); // Debugging
   };
+
+    const handleLogout = () => {
+      dispatch(clearTokens());
+    };
+
 
   return (
     <div className="container align-items-center mt-5 text-secondary">
@@ -46,6 +48,9 @@ const Login = () => {
         <a href="/register" className="text-secondary"><u>Register</u></a>
         <button type="submit" className="mt-2 btn btn-primary w-100">
           Login
+        </button>
+        <button className="btn btn-danger w-100 mt-2" onClick={() => {handleLogout(); window.location.href = '/';}}>
+          Logout
         </button>
       </form>
     </div>

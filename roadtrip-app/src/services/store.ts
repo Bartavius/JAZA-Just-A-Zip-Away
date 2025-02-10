@@ -1,13 +1,20 @@
-// store.ts
-import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './reducer';  // Import the user reducer (you already defined this)
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./authSlice";
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
 
-// Create and configure the store
+const persistConfig = {
+  key: "root",
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, authReducer);
+
 const store = configureStore({
   reducer: {
-    user: userReducer, // Attach the user reducer to the 'user' slice of the state
+    auth: persistedReducer,
   },
 });
 
-// Export the store so it can be used in the Provider
 export default store;
+export const persistor = persistStore(store);

@@ -4,6 +4,8 @@ import api from "../api"; // Import Axios instance
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // Confirm password field
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // Success message state
@@ -20,14 +22,18 @@ const Register = () => {
     }
 
     try {
-      const response = await api.post("/api/accounts/register/", {
-        username,
-        password,
+      const response = await api.post("/api/accounts/register/company/", {
+        "username": username,
+        "password": password,
+        "first_name": firstName,
+        "last_name": lastName
       });
 
       setSuccessMessage("Registration successful! You can now log in.");
       setUsername("");
       setPassword("");
+      setFirstName("");
+      setLastName("");
       setConfirmPassword(""); // Reset the confirm password field
     } catch (err: any) {
       setError(err.response?.data?.detail || "Registration failed. Please try again.");
@@ -35,7 +41,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container align-items-center mt-5 text-secondary">
+    <div className="container align-items-center text-secondary">
       <h2>Register</h2>
       <form onSubmit={handleRegister} className="w-50">
         <div className="mb-3">
@@ -47,6 +53,24 @@ const Register = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+        <div className="mb-3">
+          <label className="form-label">First Name</label>
+          <input
+            type="text"
+            className="form-control"
+            value={firstName}
+            onChange={(e) => {setFirstName(e.target.value); e.preventDefault();}}
+          />
+          </div>
+          <div className="mb-3">
+          <label className="form-label">Last Name</label>
+          <input
+            type="text"
+            className="form-control"
+            value={lastName}
+            onChange={(e) => {setLastName(e.target.value); e.preventDefault();}}
+          />
+          </div>
         <div className="mb-3">
           <label className="form-label">Password</label>
           <input

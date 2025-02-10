@@ -197,110 +197,43 @@ code {
   height: 40px;
 }
 
-.carousel {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overflow: cover;
-  border-radius: 20px;
-}
-
-.carousel-card {
-  width: 100%;
-  height: 100%;
+.card-img-top {
   object-fit: cover;
+  border-radius: 5px;
+  padding-top: 10px;
 }
 
-.carousel-card-body {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.truck-kun {
+  transform: rotate(-9deg);
+  margin-left: 80%;
+  margin-top: 15%;
+  font-size: 200px;
+  color: rgb(36, 56, 56);
+  transition: 0.5s ease-in-out;
+  animation: drive 30s infinite;
 }
 
-.carousel-card-image {
-  width: 100%;
-  height: 100%;
+.truck-kun:hover {
+  transform: translateY(-15px) scale(1.1);
+}
+
+@keyframes drive {
+  0% {
+    right: 100%; /* Starting off the screen on the right */
+  }
+  40% {
+    transform: rotateY(20deg);
+    transform: translateY(20px);
+  }
+  60% {
+    transform: rotateY(20deg);
+    transform: translateY(30px);
+  }
   
-}
-/* Carousel container styling */
-.carousel-container {
-  position: relative;
-  max-width: 600px;
-  margin: auto;
-  overflow: hidden;
-}
-
-.card_wrapper {
-	background: linear-gradient(180deg, #23273A 46.35%, #FA4A6F 119.01%);
-	width: 100%;
-	height: 100vh;
-	display: flex;
-	align-items: center;
-}
-
-.head_text {
-	font-family: bromega-Bold;
-	font-size: 45px;
-}
-
-.head_para {
-	margin-top: 15px;
-}
-
-.card_box {
-	background: #ffffff;
-	border-radius: 40px;
-	margin-top: 40px;
-	transition: .3s;
-	margin-bottom: 40px;
-}
-
-.card_box:hover {
-	box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.05);
-	transform: translateY(-10px);
-}
-
-.card_text {
-	padding: 30px 20px 25px 20px;
-}
-
-.card_text h4 {
-	font-size: 18px;
-	font-family: bromega-Bold;
-	color: #FA4A6F;
-}
-
-.card_text p {
-	 font-size: 14px;
-	 line-height: 150%;
-	 margin-top: 10px;
-	 color: #23273A;
-}
-
-.slider_carousel .owl-nav {
-	 position: absolute;
-	 top: 50%;
-	 width: 100%;
-}
-
-.slider_carousel .owl-prev, .slider_carousel .owl-next {
-	width: 40px;
-	height: 40px;
-	background: #ffffff;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	position: absolute;
-	top: 50%;
-}
-
-.slider_carousel .owl-next {
-    right: -50px;
-}
-
-.slider_carousel .owl-prev {
-    left: -50px;
+  80% {
+    transform: rotateY(10deg);
+  }
+  100% {
+    right: -300px; /* Ending off the screen on the left */
+  }
 }

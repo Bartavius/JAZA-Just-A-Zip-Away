@@ -5,7 +5,8 @@ import "./styles.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./services/store";
+import store, { persistor } from "./services/store";
+import { PersistGate } from "redux-persist/integration/react";
 // import Session from "./services/Session";
 
 const root = ReactDOM.createRoot(
@@ -14,10 +15,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <Session> */}
-        <App /> 
-      {/* </Session> */}
-    </Provider>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>,
   </React.StrictMode>
 );
 reportWebVitals(console.log);
