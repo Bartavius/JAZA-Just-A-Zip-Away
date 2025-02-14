@@ -1,5 +1,6 @@
 /Backend/Lib
 /Backend/Include
 /Backend/pyvenv.cfg
+/Backend/Scripts
 **/__pycache__
 .vscode
