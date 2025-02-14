@@ -5,7 +5,7 @@
 
 # Backend
 
-Before use make sure that all the packages are install, the package are listed in [requirements.txt](requirements.txt)
+Before use make sure that all the packages are install, the package are listed in [requirements.txt](Backend/requirements.txt)
 Then navigate to the Backend/src directory and run:
 
 ```
